@@ -51,6 +51,8 @@ void ProcessFile(string path)
     }
     catch (Exception e)
     {
-        Console.Error.WriteLine($"{path}:{e}");
+        if (string.Compare(e.Message, "Missing type keyword in mtree specification", StringComparison.Ordinal) != 0 &&
+            string.Compare(e.Message, "Unrecognized archive format", StringComparison.Ordinal) != 0)
+            Console.Error.WriteLine($"{path}:{e}");
     }
 }
