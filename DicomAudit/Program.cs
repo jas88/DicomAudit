@@ -36,7 +36,10 @@ void ProcessArchive(string path)
     foreach (var entry in arc.Entries())
     {
         using var s = entry.Stream;
-        ProcessStream(s, $"{path}!{entry.Name}");
+        using var ms = new MemoryStream((int)s.Length);
+        s.CopyTo(ms, 1 << 20);
+        ms.Seek(0, SeekOrigin.Begin);
+        ProcessStream(ms, $"{path}!{entry.Name}");
     }
 }
 
