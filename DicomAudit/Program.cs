@@ -10,16 +10,24 @@ return;
 
 bool ProcessStream(Stream s, string path)
 {
-    Span<byte> preamble = stackalloc byte[4];
-    s.Seek(128, SeekOrigin.Begin);
-    if (s.Read(preamble) != 4 || "DICM"u8 != preamble) return false;
+    try
+    {
+        Span<byte> preamble = stackalloc byte[4];
+        s.Seek(128, SeekOrigin.Begin);
+        if (s.Read(preamble) != 4 || "DICM"u8 != preamble) return false;
 
-    s.Seek(0, SeekOrigin.Begin);
-    var ds = DicomFile.Open(s).Dataset;
-    Console.WriteLine($"{ds.GetString(DicomTag.Modality)},{ds.GetString(DicomTag.StudyInstanceUID)},{ds.GetString(DicomTag.SeriesInstanceUID)},{ds.GetString(DicomTag.SOPInstanceUID)},{path}");
-    var counter = Interlocked.Increment(ref objectCount);
-    if (counter % 1024 == 0) Console.Error.Write($"{counter}\r");
-    return true;
+        s.Seek(0, SeekOrigin.Begin);
+        var ds = DicomFile.Open(s).Dataset;
+        Console.WriteLine($"{ds.GetString(DicomTag.Modality)},{ds.GetString(DicomTag.StudyInstanceUID)},{ds.GetString(DicomTag.SeriesInstanceUID)},{ds.GetString(DicomTag.SOPInstanceUID)},{path}");
+        var counter = Interlocked.Increment(ref objectCount);
+        if (counter % 1024 == 0) Console.Error.Write($"{counter}\r");
+        return true;
+    }
+    catch (Exception e)
+    {
+        Console.Error.WriteLine($"{path}:{e}");
+        return false;
+    }
 }
 
 void ProcessArchive(string path)
@@ -34,8 +42,15 @@ void ProcessArchive(string path)
 
 void ProcessFile(string path)
 {
-    var s = File.OpenRead(path);
-    if (s.Length < 132 || ProcessStream(s, path)) return;
+    try
+    {
+        var s = File.OpenRead(path);
+        if (s.Length < 132 || ProcessStream(s, path)) return;
 
-    ProcessArchive(path);
+        ProcessArchive(path);
+    }
+    catch (Exception e)
+    {
+        Console.Error.WriteLine($"{path}:{e}");
+    }
 }
