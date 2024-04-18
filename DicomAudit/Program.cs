@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Text;
 using FellowOakDicom;
 using LibArchive.Net;
 
@@ -14,7 +15,7 @@ bool ProcessStream(Stream s, string path)
     {
         Span<byte> preamble = stackalloc byte[4];
         s.Seek(128, SeekOrigin.Begin);
-        if (s.Read(preamble) != 4 || "DICM"u8 != preamble) return false;
+        if (s.Read(preamble) != 4 || "DICM"u8.SequenceCompareTo(preamble) != 0) return false;
 
         s.Seek(0, SeekOrigin.Begin);
         var ds = DicomFile.Open(s).Dataset;
@@ -25,7 +26,7 @@ bool ProcessStream(Stream s, string path)
     }
     catch (Exception e)
     {
-        Console.Error.WriteLine($"{path}:{e}");
+        Console.Error.WriteLine($"{path}:{e.Message}");
         return false;
     }
 }
@@ -56,6 +57,6 @@ void ProcessFile(string path)
     {
         if (string.Compare(e.Message, "Missing type keyword in mtree specification", StringComparison.Ordinal) != 0 &&
             string.Compare(e.Message, "Unrecognized archive format", StringComparison.Ordinal) != 0)
-            Console.Error.WriteLine($"{path}:{e}");
+            Console.Error.WriteLine($"{path}:{e.Message}");
     }
 }
