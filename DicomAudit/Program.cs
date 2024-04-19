@@ -6,7 +6,7 @@ using LibArchive.Net;
 
 long objectCount = 0;
 
-Parallel.ForEach(Directory.EnumerateFiles(".", "*", SearchOption.AllDirectories), ProcessFile);
+Parallel.ForEach(new LineReader.LineReader(Console.OpenStandardInput(), '\0').ReadLines(), ProcessFile);
 return;
 
 bool ProcessStream(Stream s, string path)
@@ -49,12 +49,6 @@ void ProcessFile(string path)
     try
     {
         var s = File.OpenRead(path);
-        if (s.Length > 128 << 20)
-        {
-            Console.Error.WriteLine($"{path}:File too large");
-            return;
-        }
-
         if (s.Length < 132 || ProcessStream(s, path)) return;
 
         ProcessArchive(path);

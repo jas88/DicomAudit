@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="fo-dicom" Version="5.1.2" />
     <PackageReference Include="LibArchive.Net" Version="0.1.4" />
+    <PackageReference Include="LineReader" Version="0.1.0" />
   </ItemGroup>
 
 </Project>
