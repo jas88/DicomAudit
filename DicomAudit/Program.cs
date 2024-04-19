@@ -49,6 +49,12 @@ void ProcessFile(string path)
     try
     {
         var s = File.OpenRead(path);
+        if (s.Length > 128 << 20)
+        {
+            Console.Error.WriteLine($"{path}:File too large");
+            return;
+        }
+
         if (s.Length < 132 || ProcessStream(s, path)) return;
 
         ProcessArchive(path);
