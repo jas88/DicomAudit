@@ -4,8 +4,12 @@ using FellowOakDicom;
 using LibArchive.Net;
 
 long objectCount = 0;
+var options = new ParallelOptions
+{
+    MaxDegreeOfParallelism = 4
+};
 
-Parallel.ForEach(new LineReader.LineReader(Console.OpenStandardInput(), '\0').ReadLines(), ProcessFile);
+Parallel.ForEach(new LineReader.LineReader(Console.OpenStandardInput(), '\0').ReadLines(), options, ProcessFile);
 return;
 
 bool ProcessStream(Stream s, string path)
