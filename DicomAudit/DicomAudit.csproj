@@ -1,18 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <PublishAot>true</PublishAot>
-    <InvariantGlobalization>true</InvariantGlobalization>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PublishAot>false</PublishAot>
+		<PublishSingleFile>true</PublishSingleFile>
+		<PublishTrimmed>true</PublishTrimmed>
+		<DebugType>embedded</DebugType>
+		<InvariantGlobalization>true</InvariantGlobalization>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="fo-dicom" Version="5.1.2" />
-    <PackageReference Include="LibArchive.Net" Version="0.1.4" />
-    <PackageReference Include="LineReader" Version="0.1.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="fo-dicom" Version="5.1.2" />
+		<PackageReference Include="LibArchive.Net" Version="0.1.4" />
+		<PackageReference Include="LineReader" Version="0.1.0" />
+	</ItemGroup>
 
 </Project>
